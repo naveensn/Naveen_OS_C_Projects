@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdint.h>
+
+char getcUart0()
+{
+    char c;
+    printf("enter c: ");
+    scanf("%c", &c);
+
+    return c;
+}
+
+
+int main()
+{
+    char str[80]={0};
+    uint8_t pos[20]={81};
+
+    char c = getcUart0();
+    uint8_t i=0, j=0, flag=0;
+    while((uint8_t)c != 10 && (uint8_t)c != 13)
+    {
+        if(i > 80)
+        {
+            printf("more then 80\n");
+            return 1;
+        }
+        if((uint8_t)c == 8 || (uint8_t)c == 127)
+        {
+            if (i > 0)
+            {
+                i--;
+            }
+        }
+        else if(((uint8_t)c >= 48 && (uint8_t)c <= 57) || ((uint8_t)c >= 65 && (uint8_t)c <= 90) ||
+                ((uint8_t)c >= 97 && (uint8_t)c <= 122) || ((uint8_t)c >= 44 && (uint8_t)c <= 46))
+        {
+            if(flag == 0)
+            {
+                pos[j] = i;
+                flag = 1;
+                j++;
+            }
+            str[i] = c;
+            i++;
+        }
+        else if (flag == 1)
+        {
+            str[i] = '\0';
+            i++;
+            flag = 0;
+        }
+        c = getcUart0();
+    }
+    printf("str: %s\n", &str[pos[0]]);
+    for(i=1;pos[i]>0;i++)
+    {
+        printf("str: %s\n", &str[pos[i]]);
+    }
+}
